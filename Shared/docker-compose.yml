@@ -1,0 +1,28 @@
+name: shared
+services:
+  shared.server:
+    image: ${DOCKER_REGISTRY-}shared-server
+    build:
+      context: .
+      dockerfile: Shared.Server/Dockerfile
+    container_name: shared-server
+
+  shared.client:
+    image: ${DOCKER_REGISTRY-}shared-client
+    build:
+      context: .
+      dockerfile: Shared.Client/Dockerfile
+    container_name: shared-client
+
+  shared.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: shared-db
+    env_file: .env
+    ports:
+      - "1433:1433"
+    restart: no
+    volumes:
+      - db_data:/var/opt/mssql
+
+volumes:
+  db_data:
